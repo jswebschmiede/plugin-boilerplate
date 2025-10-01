@@ -1,0 +1,52 @@
+{
+	"name": "js/plugin-boilerplate",
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"sirbrillig/phpcs-changed": "^2.11",
+		"sirbrillig/phpcs-variable-analysis": "^2.11",
+		"wp-cli/i18n-command": "^2.4",
+		"wp-coding-standards/wpcs": "^3.0",
+		"symfony/var-dumper": "^7.0"
+	},
+	"scripts": {
+		"php:lint": "vendor/bin/phpcs -p -s",
+		"php:lint:errors": "vendor/bin/phpcs -p -s --runtime-set ignore_warnings_on_exit 1",
+		"php:lint:autofix": "vendor/bin/phpcbf",
+		"php:lint:changed": "vendor/bin/phpcs-changed --git --git-unstaged",
+		"make-pot": "wp i18n make-pot . languages/plugin-boilerplate.pot",
+		"build": [
+			"rm -rf dist",
+			"mkdir -p dist",
+			"composer install --no-dev --optimize-autoloader",
+			"pnpm run build",
+			"zip -r dist/plugin-boilerplate.zip ./ -x@.zipignore"
+		]
+	},
+	"autoload": {
+		"files": [
+			"./includes/Fields/Code/field.php"
+		],
+		"psr-4": {
+			"JS\\BicycleOverview\\": "includes/",
+			"Carbon_Field_Code\\": "./includes/Fields/Code/core/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Joerg Schoeneburg",
+			"email": "schoeneburg.j@googlemail.com",
+			"homepage": "https://joerg-schoeneburg.de"
+		}
+	],
+	"config": {
+		"process-timeout": 600,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"require": {
+		"htmlburger/carbon-fields": "^3.6",
+		"psr/container": "^1.0"
+	}
+}

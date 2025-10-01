@@ -1,0 +1,17 @@
+@use 'variables' as *;
+@use 'utils' as *;
+
+.plugin-boilerplate {
+	// Border Variables
+	--bc-overview-border-radius-sm: 4px;
+	--bc-overview-border-radius-md: 8px;
+	--bc-overview-border-radius-lg: 12px;
+
+	// Shadow Variables
+	--bc-overview-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+	--bc-overview-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+	--bc-overview-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+	width: 100%;
+	max-width: 100%;
+}

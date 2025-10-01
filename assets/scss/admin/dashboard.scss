@@ -1,0 +1,40 @@
+/**
+ * Bicycle Overview Admin Dashboard Styles
+ */
+
+.required-field label:not(.error):after {
+	content: ' *';
+	color: #d63638;
+	font-weight: bold;
+}
+
+/* Validation error styling for form elements */
+input.error,
+select.error,
+textarea.error {
+	border-color: #d63638 !important;
+	box-shadow: 0 0 2px rgba(214, 54, 56, 0.8);
+}
+
+label.error {
+	color: #d63638;
+	font-size: 12px;
+	margin-top: 5px;
+	display: block;
+	font-style: italic;
+}
+
+/* Admin notice improvements */
+.notice.notice-error ul {
+	margin: 10px 0;
+	padding-left: 20px;
+}
+
+.notice.notice-error li {
+	margin: 5px 0;
+}
+
+/* Bicycle Meta Box Improvements */
+.form-table .required-field th {
+	position: relative;
+}
