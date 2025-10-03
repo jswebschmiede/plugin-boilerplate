@@ -1,8 +1,5 @@
-# This file is for unifying the coding style for different editors and IDEs
-# editorconfig.org
-
-# WordPress Coding Standards
-# https://make.wordpress.org/core/handbook/coding-standards/
+# EditorConfig für WordPress Coding Standards
+# https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/
 
 root = true
 
@@ -11,15 +8,22 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
+
+[*.php]
 indent_style = tab
 indent_size = 4
 
-[{package.json,*.yml}]
+[*.js]
+indent_style = tab
+indent_size = 4
+
+[*.scss]
+indent_style = tab
+indent_size = 4
+
+[*.json]
 indent_style = space
 indent_size = 2
-
-[composer.json]
-indent_style = space
 
 [*.md]
 trim_trailing_whitespace = false

@@ -8,11 +8,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const { ProvidePlugin } = require('webpack');
 
 /**
- * Root path to Carbon Fields
- */
-const root = path.resolve(__dirname, '../../../vendor/htmlburger/carbon-fields');
-
-/**
  * Indicates if we're running the build process in production mode.
  *
  * @type {Boolean}
@@ -33,7 +28,8 @@ module.exports = {
 		minimize: isProduction,
 		minimizer: isProduction ? [
 			new TerserPlugin({
-				parallel: true
+				parallel: true,
+				minify: TerserPlugin.terser,
 			}),
 			new CssMinimizerPlugin({
 				minimizerOptions: {
@@ -89,11 +85,6 @@ module.exports = {
 				]
 			}
 		]
-	},
-	resolve: {
-		alias: {
-			'@carbon-fields': root
-		}
 	},
 	externals: [
 		'@wordpress/compose',

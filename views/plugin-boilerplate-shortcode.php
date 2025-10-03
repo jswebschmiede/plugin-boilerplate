@@ -2,11 +2,9 @@
 
 /**
  * The template for the plugin-boilerplate shortcode.
- *
- * @package plugin-boilerplate
  */
 
-defined('ABSPATH') or die('Thanks for visting');
+defined( 'ABSPATH' ) || die( 'Thanks for visting' );
 
 ?>
 

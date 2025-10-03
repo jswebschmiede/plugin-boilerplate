@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<ruleset name="My Plugin">
+	<description>PHPCS rules for my plugin</description>
+
+	<!-- WordPress Core Standard laden -->
+	<rule ref="WordPress-Core">
+		<!-- Dateinamen-Prüfung komplett ausschalten -->
+		<exclude name="WordPress.Files.FileName" />
+	</rule>
+
+	<!-- Projekt-Ordner scannen -->
+	<file>.</file>
+
+	<!-- Typische Ordner ausschließen -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>tests/*</exclude-pattern>
+</ruleset>

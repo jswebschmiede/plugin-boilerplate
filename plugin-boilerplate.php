@@ -9,18 +9,17 @@
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: plugin-boilerplate
- * Domain Path: /languages
+ * Domain Path: /languages.
  */
 
-defined('ABSPATH') or die('Thanks for visting');
+defined( 'ABSPATH' ) or die( 'Thanks for visting' );
 
 use JS\PluginBoilerplate\PluginBoilerplate;
 
-require_once(plugin_dir_path(__FILE__) . '/vendor/autoload.php');
+require_once plugin_dir_path( __DIR__ ) . '/vendor/autoload.php';
 
-$pluginBoilerplate = PluginBoilerplate::get_instance();
-$pluginBoilerplate->run();
+$plugin_boilerplate = PluginBoilerplate::get_instance();
+$plugin_boilerplate->run();
 
-register_activation_hook(__FILE__, [$pluginBoilerplate, 'activate']);
-register_deactivation_hook(__FILE__, [$pluginBoilerplate, 'deactivate']);
-
+register_activation_hook( __FILE__, array( $plugin_boilerplate, 'activate' ) );
+register_deactivation_hook( __FILE__, array( $plugin_boilerplate, 'deactivate' ) );

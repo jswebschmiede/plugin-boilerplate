@@ -15,4 +15,4 @@ webpack.config.js
 .prettierrc
 .editorconfig
 .gitignore
-.zipignore
+.distignore
