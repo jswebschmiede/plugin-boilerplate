@@ -28,7 +28,7 @@
 			"./includes/Fields/Code/field.php"
 		],
 		"psr-4": {
-			"JS\\BicycleOverview\\": "includes/",
+			"JS\\PluginBoilerplate\\": "includes/",
 			"Carbon_Field_Code\\": "./includes/Fields/Code/core/"
 		}
 	},
