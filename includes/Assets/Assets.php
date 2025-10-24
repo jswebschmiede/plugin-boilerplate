@@ -42,23 +42,23 @@ class Assets {
 			}
 		}
 
-		$asset_file = plugin_dir_path( dirname( __DIR__, 2 ) ) . 'build/admin-dashboard.asset.php';
+		$asset_file = plugin_dir_path( dirname( __DIR__ ) ) . 'build/admin-dashboard.asset.php';
 		$asset_data = file_exists( $asset_file ) ? include $asset_file : array();
 
 		wp_register_script(
 			'js-plugin-boilerplate-dashboard-script',
-			plugin_dir_url( dirname( __DIR__, 2 ) ) . 'build/admin-dashboard.js',
+			plugin_dir_url( dirname( __DIR__ ) ) . 'build/admin-dashboard.js',
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			true,
 		);
 
-		$asset_file = plugin_dir_path( dirname( __DIR__, 2 ) ) . 'build/admin-dashboard-style.asset.php';
+		$asset_file = plugin_dir_path( dirname( __DIR__ ) ) . 'build/admin-dashboard-style.asset.php';
 		$asset_data = file_exists( $asset_file ) ? include $asset_file : array();
 
 		wp_register_style(
 			'js-plugin-boilerplate-dashboard-styles',
-			plugin_dir_url( dirname( __DIR__, 2 ) ) . 'build/admin-dashboard-style.css',
+			plugin_dir_url( dirname( __DIR__ ) ) . 'build/admin-dashboard-style.css',
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			'all',
@@ -72,23 +72,23 @@ class Assets {
 	 * Registers the frontend plugin assets.
 	 */
 	public function register_frontend_scripts(): void {
-		$asset_file = plugin_dir_path( dirname( __DIR__, 2 ) ) . 'build/frontend-main.asset.php';
+		$asset_file = plugin_dir_path( dirname( __DIR__ ) ) . 'build/frontend-main.asset.php';
 		$asset_data = file_exists( $asset_file ) ? include $asset_file : array();
 
 		wp_register_script(
 			'js-plugin-boilerplate-frontend-script',
-			plugin_dir_url( dirname( __DIR__, 2 ) ) . 'build/frontend-main.js',
+			plugin_dir_url( dirname( __DIR__ ) ) . 'build/frontend-main.js',
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			true,
 		);
 
-		$asset_file = plugin_dir_path( dirname( __DIR__, 2 ) ) . 'build/frontend-style.asset.php';
+		$asset_file = plugin_dir_path( dirname( __DIR__ ) ) . 'build/frontend-style.asset.php';
 		$asset_data = file_exists( $asset_file ) ? include $asset_file : array();
 
 		wp_register_style(
 			'js-plugin-boilerplate-frontend-styles',
-			plugin_dir_url( dirname( __DIR__, 2 ) ) . 'build/frontend-style.css',
+			plugin_dir_url( dirname( __DIR__ ) ) . 'build/frontend-style.css',
 			$asset_data['dependencies'],
 			$asset_data['version'],
 			'all',

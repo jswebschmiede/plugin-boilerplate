@@ -3,7 +3,9 @@
 use Carbon_Fields\Carbon_Fields;
 use Carbon_Field_Code\Code_Field;
 
-define( 'Carbon_Field_Code\\DIR', __DIR__ );
+if ( ! defined( 'Carbon_Field_Code\\DIR' ) ) {
+	define( 'Carbon_Field_Code\\DIR', __DIR__ );
+}
 
 // phpcs:disable PSR1.Files.SideEffects.FoundWithSymbols
 Carbon_Fields::extend(

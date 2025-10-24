@@ -30,7 +30,6 @@ class ExamplePostType {
 		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'populate_admin_columns' ), 10, 2 );
 		add_action( 'restrict_manage_posts', array( $this, 'add_taxonomy_filter' ) );
 		add_action( 'parse_query', array( $this, 'filter_posts_by_taxonomy' ) );
-		add_action( 'pre_get_posts', array( $this, 'handle_example_type_sorting' ) );
 		add_filter( 'dashboard_recent_posts_query_args', array( $this, 'add_example_post_type_to_dashboard' ) );
 		add_filter( 'manage_edit-' . self::POST_TYPE . '_sortable_columns', array( $this, 'add_sortable_columns' ) );
 		add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', array( $this, 'add_admin_columns' ) );
@@ -165,19 +164,10 @@ class ExamplePostType {
 		// Rebuild columns with our custom order
 		$reordered_columns = array();
 
-		// Add checkbox if it exists
-		if ( isset( $columns['cb'] ) ) {
-			$reordered_columns['cb'] = $columns['cb'];
-			unset( $columns['cb'] );
-		}
-
-		// Add our custom columns
+		$reordered_columns['cb']               = $columns['cb'];
+		$reordered_columns['title']            = $columns['title'];
 		$reordered_columns['js_example_image'] = __( 'Beispiel Bild', 'plugin-boilerplate' );
-
-		// Add remaining columns (date, etc.)
-		foreach ( $columns as $key => $value ) {
-			$reordered_columns[ $key ] = $value;
-		}
+		$reordered_columns['date']             = $columns['date'];
 
 		return $reordered_columns;
 	}

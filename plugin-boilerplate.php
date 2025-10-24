@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) or die( 'Thanks for visting' );
 
 use JS\PluginBoilerplate\PluginBoilerplate;
 
-require_once plugin_dir_path( __DIR__ ) . '/vendor/autoload.php';
+require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
 
 $plugin_boilerplate = PluginBoilerplate::get_instance();
 $plugin_boilerplate->run();

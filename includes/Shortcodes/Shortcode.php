@@ -16,11 +16,11 @@ class Shortcode {
 	 * Initializes the shortcode.
 	 */
 	public function init(): void {
-		add_shortcode( 'plugin-boilerplate', array( $this, 'render_shortcode_plugin_boilerplate' ) );
+		add_shortcode( 'plugin_boilerplate', array( $this, 'render_shortcode_plugin_boilerplate' ) );
 	}
 
 	/**
-	 * Renders the shortcode for the bicycle overview form.
+	 * Renders the shortcode for the plugin boilerplate.
 	 *
 	 * @param array $atts
 	 * @param string $content
@@ -36,7 +36,7 @@ class Shortcode {
 		wp_enqueue_style( 'js-plugin-boilerplate-frontend-styles' );
 		wp_enqueue_script( 'js-plugin-boilerplate-frontend-script' );
 
-		require plugin_dir_path( dirname( __DIR__ ) ) . 'views/bicycle-overview-shortcode.php';
+		require plugin_dir_path( dirname( __DIR__ ) ) . 'views/plugin-boilerplate-shortcode.php';
 
 		return ob_get_clean();
 	}
