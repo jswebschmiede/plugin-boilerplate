@@ -20,7 +20,7 @@
 			"mkdir -p dist",
 			"composer install --no-dev --optimize-autoloader",
 			"pnpm run build",
-			"zip -r dist/plugin-boilerplate.zip ./ -x@.zipignore"
+			"zip -r dist/plugin-boilerplate.zip ./ -x@.distignore"
 		]
 	},
 	"autoload": {

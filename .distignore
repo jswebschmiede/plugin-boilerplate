@@ -1,14 +1,15 @@
 # node_modules, dist, tests, assets – überall ausschließen
-.git
+.git/*
 */.git/*
+**/.git/*
 node_modules/*
 */node_modules/*
 dist/*
 */dist/*
 tests/*
 */tests/*
-*/assets/js/*
-*/assets/scss/*
+assets/*
+includes/Fields/Code/src/*
 
 # macOS-Systemdateien
 *.DS_Store
