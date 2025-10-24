@@ -1,18 +1,51 @@
-.git*
+# node_modules, dist, tests, assets – überall ausschließen
+.git
+*/.git/*
 node_modules/*
-tests/*
-assets/*
-*.DS_Store
+*/node_modules/*
 dist/*
+*/dist/*
+tests/*
+*/tests/*
+*/assets/js/*
+*/assets/scss/*
+
+# macOS-Systemdateien
+*.DS_Store
+*/.DS_Store
+
+# Projektkonfigurationsdateien (auch in Unterordnern)
 composer.json
+*/composer.json
 composer.lock
+*/composer.lock
 package.json
+*/package.json
 package-lock.json
+*/package-lock.json
 pnpm-lock.yaml
-wp-content/debug.log
-wp-content/languages/plugin-boilerplate.pot
+*/pnpm-lock.yaml
+phpcs.xml
+*/phpcs.xml
 webpack.config.js
+*/webpack.config.js
+
+# Linting & Editor-Konfigurationen
 .prettierrc
+*/.prettierrc
 .editorconfig
+*/.editorconfig
 .gitignore
+*/.gitignore
 .distignore
+*/.distignore
+
+# Build-/Tooling-Dateien
+.babelrc.js
+*/.babelrc.js
+.postcssrc.js
+*/.postcssrc.js
+
+# Dokumentation
+README.md
+*/README.md
