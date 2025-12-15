@@ -1,5 +1,13 @@
 {
 	"name": "js/plugin-boilerplate",
+	"description": "Plugin Boilerplate",
+	"version": "1.0.0",
+	"author": "Joerg Schoeneburg",
+	"author_email": "schoeneburg.j@googlemail.com",
+	"author_homepage": "https://joerg-schoeneburg.de",
+	"license": "GPL-2.0-or-later",
+	"license_uri": "https://www.gnu.org/licenses/gpl-2.0.html",
+	"type": "wordpress-plugin",
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
@@ -41,11 +49,15 @@
 	],
 	"config": {
 		"process-timeout": 600,
+		"optimize-autoloader": true,
+		"sort-packages": true,
 		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true
+			"dealerdirect/phpcodesniffer-composer-installer": true,
+			"automattic/jetpack-autoloader": true
 		}
 	},
 	"require": {
+		"automattic/jetpack-autoloader": "^2",
 		"htmlburger/carbon-fields": "^3.6",
 		"psr/container": "^1.0"
 	}

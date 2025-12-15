@@ -58,7 +58,20 @@ class PluginBoilerplate {
 	 * Boot Carbon Fields early.
 	 */
 	public function boot_carbon_fields(): void {
-		Carbon_Fields::boot();
+		if ( ! class_exists( Carbon_Fields::class ) ) {
+			add_action(
+				'admin_notices',
+				function () {
+					echo '<div class="error"><p><strong>Plugin Boilerplate:</strong> Carbon Fields is not installed.</p></div>';
+				}
+			);
+			return;
+		}
+
+		// Only boot Carbon Fields if it hasn't been booted yet
+		if ( ! Carbon_Fields::is_booted() ) {
+			Carbon_Fields::boot();
+		}
 	}
 
 	/**

@@ -16,7 +16,17 @@ defined( 'ABSPATH' ) or die( 'Thanks for visting' );
 
 use JS\PluginBoilerplate\PluginBoilerplate;
 
-require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload.php';
+if ( ! file_exists( plugin_dir_path( __FILE__ ) . '/vendor/autoload_packages.php' ) ) {
+	add_action(
+		'admin_notices',
+		function () {
+			echo '<div class="error"><p><strong>Plugin Boilerplate:</strong> Please run <code>composer install</code> in the plugin directory.</p></div>';
+		}
+	);
+	return;
+}
+
+require_once plugin_dir_path( __FILE__ ) . '/vendor/autoload_packages.php';
 
 $plugin_boilerplate = PluginBoilerplate::get_instance();
 $plugin_boilerplate->run();
