@@ -25,6 +25,11 @@ class SettingsController implements Hookable {
 	private const string SECTION = 'plugin_boilerplate_main';
 
 	/**
+	 * Field types with several inputs, rendered as a fieldset without a row label.
+	 */
+	private const array GROUPED_TYPES = array( 'radio', 'checkbox', 'checkbox-list' );
+
+	/**
 	 * Registers hooks.
 	 *
 	 * @return void
@@ -51,12 +56,19 @@ class SettingsController implements Hookable {
 	}
 
 	/**
-	 * Registers settings, the section and the fields.
+	 * Registers the option, the section and one settings field per field definition.
 	 *
 	 * @return void
 	 */
 	public function register_settings(): void {
-		$this->register_options();
+		register_setting(
+			SettingsModel::OPTION_NAME,
+			SettingsModel::OPTION_NAME,
+			array(
+				'type'              => 'object',
+				'sanitize_callback' => array( SettingsModel::class, 'sanitize' ),
+			)
+		);
 
 		add_settings_section(
 			self::SECTION,
@@ -65,22 +77,24 @@ class SettingsController implements Hookable {
 			SettingsModel::MENU_SLUG
 		);
 
-		$this->add_field(
-			SettingsModel::GREETING_OPTION,
-			__( 'Greeting', 'plugin-boilerplate' ),
-			array( $this, 'render_greeting_field' )
-		);
-		$this->add_field(
-			SettingsModel::LAYOUT_OPTION,
-			__( 'Layout', 'plugin-boilerplate' ),
-			array( $this, 'render_layout_field' )
-		);
-		$this->add_field(
-			SettingsModel::POST_TYPES_OPTION,
-			__( 'Content types', 'plugin-boilerplate' ),
-			array( $this, 'render_post_types_field' ),
-			false
-		);
+		foreach ( SettingsModel::get_fields() as $key => $field ) {
+			$id = SettingsModel::OPTION_NAME . '-' . $key;
+
+			add_settings_field(
+				$id,
+				$field['label'],
+				array( $this, 'render_field' ),
+				SettingsModel::MENU_SLUG,
+				self::SECTION,
+				array(
+					'key'       => $key,
+					'id'        => $id,
+					'field'     => $field,
+					// Grouped inputs are labelled by their fieldset legend instead.
+					'label_for' => in_array( $field['type'], self::GROUPED_TYPES, true ) ? '' : $id,
+				)
+			);
+		}
 	}
 
 	/**
@@ -112,51 +126,25 @@ class SettingsController implements Hookable {
 	}
 
 	/**
-	 * Renders the greeting text field.
+	 * Renders one settings field with its view from views/fields/.
 	 *
+	 * @param array{key: string, id: string, field: array<string, mixed>} $args Arguments passed to add_settings_field().
 	 * @return void
 	 */
-	public function render_greeting_field(): void {
-		View::display(
-			'fields/text',
-			array(
-				'name'        => SettingsModel::GREETING_OPTION,
-				'value'       => SettingsModel::get_greeting(),
-				'description' => __( 'Shown above the list. Leave empty to hide it.', 'plugin-boilerplate' ),
-			)
-		);
-	}
+	public function render_field( array $args ): void {
+		$field = $args['field'];
 
-	/**
-	 * Renders the layout select.
-	 *
-	 * @return void
-	 */
-	public function render_layout_field(): void {
 		View::display(
-			'fields/select',
+			'fields/' . $field['type'],
 			array(
-				'name'        => SettingsModel::LAYOUT_OPTION,
-				'choices'     => SettingsModel::get_layout_choices(),
-				'selected'    => SettingsModel::get_layout(),
-				'description' => __( 'How the shortcode arranges the entries.', 'plugin-boilerplate' ),
-			)
-		);
-	}
-
-	/**
-	 * Renders the post type checkboxes.
-	 *
-	 * @return void
-	 */
-	public function render_post_types_field(): void {
-		View::display(
-			'fields/checkbox-list',
-			array(
-				'name'        => SettingsModel::POST_TYPES_OPTION,
-				'choices'     => SettingsModel::get_post_type_choices(),
-				'selected'    => SettingsModel::get_post_types(),
-				'description' => __( 'The shortcode lists the latest entries of these content types.', 'plugin-boilerplate' ),
+				'id'          => $args['id'],
+				'name'        => SettingsModel::OPTION_NAME . '[' . $args['key'] . ']',
+				'value'       => SettingsModel::get( $args['key'] ),
+				'label'       => $field['label'],
+				'description' => $field['description'] ?? '',
+				'choices'     => $field['choices'] ?? array(),
+				// Full definition, for type specific keys such as min/max.
+				'field'       => $field,
 			)
 		);
 	}
@@ -175,61 +163,5 @@ class SettingsController implements Hookable {
 		);
 
 		return array( 'settings' => $settings_link ) + $links;
-	}
-
-	/**
-	 * Registers each plugin option with the Settings API.
-	 *
-	 * @return void
-	 */
-	private function register_options(): void {
-		register_setting(
-			SettingsModel::OPTION_GROUP,
-			SettingsModel::GREETING_OPTION,
-			array(
-				'type'              => 'string',
-				'sanitize_callback' => array( SettingsModel::class, 'sanitize_greeting' ),
-				'default'           => '',
-			)
-		);
-		register_setting(
-			SettingsModel::OPTION_GROUP,
-			SettingsModel::LAYOUT_OPTION,
-			array(
-				'type'              => 'string',
-				'sanitize_callback' => array( SettingsModel::class, 'sanitize_layout' ),
-				'default'           => SettingsModel::LAYOUT_LIST,
-			)
-		);
-		register_setting(
-			SettingsModel::OPTION_GROUP,
-			SettingsModel::POST_TYPES_OPTION,
-			array(
-				'type'              => 'array',
-				'sanitize_callback' => array( SettingsModel::class, 'sanitize_post_types' ),
-				'default'           => SettingsModel::DEFAULT_POST_TYPES,
-			)
-		);
-	}
-
-	/**
-	 * Adds one settings field to the main section.
-	 *
-	 * @param string   $id       Option name.
-	 * @param string   $title    Field label.
-	 * @param callable $callback Field renderer. The callable must output escaped markup.
-	 * @param bool     $has_label Whether the title becomes a <label> for the input with id $id.
-	 *                            Use false for grouped inputs like checkbox lists.
-	 * @return void
-	 */
-	private function add_field( string $id, string $title, callable $callback, bool $has_label = true ): void {
-		add_settings_field(
-			$id,
-			$title,
-			$callback,
-			SettingsModel::MENU_SLUG,
-			self::SECTION,
-			$has_label ? array( 'label_for' => $id ) : array()
-		);
 	}
 }

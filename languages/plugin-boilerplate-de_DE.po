@@ -1,5 +1,3 @@
-# Copyright (C) 2026 jswebforge
-# This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Plugin Boilerplate 0.1.0\n"
@@ -7,19 +5,19 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
-"Language: de_DE\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-11-11T15:13:13+00:00\n"
-"PO-Revision-Date: 2026-11-11 16:00+0100\n"
+"PO-Revision-Date: 2026-11-11T15:50:34+00:00\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: plugin-boilerplate\n"
 
 #. Plugin Name of the plugin
 #: plugin-boilerplate.php:3
-#: src/Controllers/SettingsController.php:45
-#: src/Controllers/SettingsController.php:46
+#: src/Controllers/SettingsController.php:50
+#: src/Controllers/SettingsController.php:51
 msgid "Plugin Boilerplate"
 msgstr "Plugin Boilerplate"
 
@@ -108,45 +106,21 @@ msgstr "Neuen Beispieltyp hinzufügen"
 
 #: src/Controllers/PostTypeController.php:139
 #: src/Controllers/PostTypeController.php:161
-#: views/shortcode.php:43
+#: views/shortcode.php:49
 msgid "Featured"
 msgstr "Hervorgehoben"
 
-#: src/Controllers/SettingsController.php:63
+#: src/Controllers/SettingsController.php:75
 msgid "Shortcode"
 msgstr "Shortcode"
 
-#: src/Controllers/SettingsController.php:70
-msgid "Greeting"
-msgstr "Begrüßung"
-
-#: src/Controllers/SettingsController.php:75
-msgid "Layout"
-msgstr "Layout"
-
-#: src/Controllers/SettingsController.php:80
-msgid "Content types"
-msgstr "Inhaltstypen"
-
 #. translators: %s: Shortcode tag.
-#: src/Controllers/SettingsController.php:108
+#: src/Controllers/SettingsController.php:122
 #, php-format
 msgid "These settings control the output of the %s shortcode."
 msgstr "Diese Einstellungen steuern die Ausgabe des Shortcodes %s."
 
-#: src/Controllers/SettingsController.php:125
-msgid "Shown above the list. Leave empty to hide it."
-msgstr "Wird über der Liste angezeigt. Leer lassen, um sie auszublenden."
-
-#: src/Controllers/SettingsController.php:142
-msgid "How the shortcode arranges the entries."
-msgstr "Wie der Shortcode die Einträge anordnet."
-
-#: src/Controllers/SettingsController.php:159
-msgid "The shortcode lists the latest entries of these content types."
-msgstr "Der Shortcode listet die neuesten Einträge dieser Inhaltstypen auf."
-
-#: src/Controllers/SettingsController.php:174
+#: src/Controllers/SettingsController.php:160
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -190,13 +164,71 @@ msgstr "„%s“ ist jetzt hervorgehoben."
 msgid "“%s” is no longer featured."
 msgstr "„%s“ ist nicht mehr hervorgehoben."
 
-#: src/Models/SettingsModel.php:107
+#: src/Models/SettingsModel.php:59
+msgid "Greeting"
+msgstr "Begrüßung"
+
+#: src/Models/SettingsModel.php:60
+msgid "Shown above the list. Leave empty to hide it."
+msgstr "Wird über der Liste angezeigt. Leer lassen, um sie auszublenden."
+
+#: src/Models/SettingsModel.php:65
+msgid "Introduction"
+msgstr "Einleitung"
+
+#: src/Models/SettingsModel.php:66
+msgid "Shown below the greeting. Line breaks are kept."
+msgstr "Wird unter der Begrüßung angezeigt. Zeilenumbrüche bleiben erhalten."
+
+#: src/Models/SettingsModel.php:71
+msgid "Layout"
+msgstr "Layout"
+
+#: src/Models/SettingsModel.php:72
+msgid "How the shortcode arranges the entries."
+msgstr "Wie der Shortcode die Einträge anordnet."
+
+#: src/Models/SettingsModel.php:74
 msgid "List"
 msgstr "Liste"
 
-#: src/Models/SettingsModel.php:108
+#: src/Models/SettingsModel.php:75
 msgid "Grid"
 msgstr "Raster"
+
+#: src/Models/SettingsModel.php:81
+msgid "Order"
+msgstr "Reihenfolge"
+
+#: src/Models/SettingsModel.php:83
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+#: src/Models/SettingsModel.php:84
+msgid "Alphabetical"
+msgstr "Alphabetisch"
+
+#: src/Models/SettingsModel.php:90
+msgid "Date"
+msgstr "Datum"
+
+#: src/Models/SettingsModel.php:91
+msgid "Show the publication date of each entry."
+msgstr "Veröffentlichungsdatum bei jedem Eintrag anzeigen."
+
+#: src/Models/SettingsModel.php:96
+msgid "Content types"
+msgstr "Inhaltstypen"
+
+#: src/Models/SettingsModel.php:97
+msgid "The shortcode lists the latest entries of these content types."
+msgstr "Der Shortcode listet die neuesten Einträge dieser Inhaltstypen auf."
+
+#. translators: %s: Setting key.
+#: src/Models/SettingsModel.php:121
+#, php-format
+msgid "Unknown setting \"%s\"."
+msgstr "Unbekannte Einstellung „%s“."
 
 #: views/admin-settings.php:26
 msgid "Usage"
@@ -206,7 +238,7 @@ msgstr "Verwendung"
 msgid "Add the shortcode to any post or page. The optional count attribute limits the number of entries (1–20)."
 msgstr "Füge den Shortcode in einen beliebigen Beitrag oder eine Seite ein. Das optionale Attribut count begrenzt die Anzahl der Einträge (1–20)."
 
-#: views/shortcode.php:33
+#: views/shortcode.php:39
 msgid "Nothing to show yet."
 msgstr "Noch nichts anzuzeigen."
 

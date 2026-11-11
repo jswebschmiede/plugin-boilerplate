@@ -9,15 +9,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-11T15:13:13+00:00\n"
+"POT-Creation-Date: 2026-11-11T15:50:30+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: plugin-boilerplate\n"
 
 #. Plugin Name of the plugin
 #: plugin-boilerplate.php:3
-#: src/Controllers/SettingsController.php:45
-#: src/Controllers/SettingsController.php:46
+#: src/Controllers/SettingsController.php:50
+#: src/Controllers/SettingsController.php:51
 msgid "Plugin Boilerplate"
 msgstr ""
 
@@ -106,45 +106,21 @@ msgstr ""
 
 #: src/Controllers/PostTypeController.php:139
 #: src/Controllers/PostTypeController.php:161
-#: views/shortcode.php:43
+#: views/shortcode.php:49
 msgid "Featured"
 msgstr ""
 
-#: src/Controllers/SettingsController.php:63
+#: src/Controllers/SettingsController.php:75
 msgid "Shortcode"
 msgstr ""
 
-#: src/Controllers/SettingsController.php:70
-msgid "Greeting"
-msgstr ""
-
-#: src/Controllers/SettingsController.php:75
-msgid "Layout"
-msgstr ""
-
-#: src/Controllers/SettingsController.php:80
-msgid "Content types"
-msgstr ""
-
 #. translators: %s: Shortcode tag.
-#: src/Controllers/SettingsController.php:108
+#: src/Controllers/SettingsController.php:122
 #, php-format
 msgid "These settings control the output of the %s shortcode."
 msgstr ""
 
-#: src/Controllers/SettingsController.php:125
-msgid "Shown above the list. Leave empty to hide it."
-msgstr ""
-
-#: src/Controllers/SettingsController.php:142
-msgid "How the shortcode arranges the entries."
-msgstr ""
-
-#: src/Controllers/SettingsController.php:159
-msgid "The shortcode lists the latest entries of these content types."
-msgstr ""
-
-#: src/Controllers/SettingsController.php:174
+#: src/Controllers/SettingsController.php:160
 msgid "Settings"
 msgstr ""
 
@@ -188,12 +164,70 @@ msgstr ""
 msgid "“%s” is no longer featured."
 msgstr ""
 
-#: src/Models/SettingsModel.php:107
+#: src/Models/SettingsModel.php:59
+msgid "Greeting"
+msgstr ""
+
+#: src/Models/SettingsModel.php:60
+msgid "Shown above the list. Leave empty to hide it."
+msgstr ""
+
+#: src/Models/SettingsModel.php:65
+msgid "Introduction"
+msgstr ""
+
+#: src/Models/SettingsModel.php:66
+msgid "Shown below the greeting. Line breaks are kept."
+msgstr ""
+
+#: src/Models/SettingsModel.php:71
+msgid "Layout"
+msgstr ""
+
+#: src/Models/SettingsModel.php:72
+msgid "How the shortcode arranges the entries."
+msgstr ""
+
+#: src/Models/SettingsModel.php:74
 msgid "List"
 msgstr ""
 
-#: src/Models/SettingsModel.php:108
+#: src/Models/SettingsModel.php:75
 msgid "Grid"
+msgstr ""
+
+#: src/Models/SettingsModel.php:81
+msgid "Order"
+msgstr ""
+
+#: src/Models/SettingsModel.php:83
+msgid "Newest first"
+msgstr ""
+
+#: src/Models/SettingsModel.php:84
+msgid "Alphabetical"
+msgstr ""
+
+#: src/Models/SettingsModel.php:90
+msgid "Date"
+msgstr ""
+
+#: src/Models/SettingsModel.php:91
+msgid "Show the publication date of each entry."
+msgstr ""
+
+#: src/Models/SettingsModel.php:96
+msgid "Content types"
+msgstr ""
+
+#: src/Models/SettingsModel.php:97
+msgid "The shortcode lists the latest entries of these content types."
+msgstr ""
+
+#. translators: %s: Setting key.
+#: src/Models/SettingsModel.php:121
+#, php-format
+msgid "Unknown setting \"%s\"."
 msgstr ""
 
 #: views/admin-settings.php:26
@@ -204,7 +238,7 @@ msgstr ""
 msgid "Add the shortcode to any post or page. The optional count attribute limits the number of entries (1–20)."
 msgstr ""
 
-#: views/shortcode.php:33
+#: views/shortcode.php:39
 msgid "Nothing to show yet."
 msgstr ""
 

@@ -58,7 +58,7 @@ class ShortcodeController implements Hookable {
 		);
 
 		$count      = max( 1, min( self::MAX_COUNT, absint( $atts['count'] ) ) );
-		$post_types = SettingsModel::get_post_types();
+		$post_types = (array) SettingsModel::get( 'post_types' );
 
 		// Assets are enqueued here instead of on every page; WordPress prints late styles in the footer.
 		Assets::enqueue_frontend();
@@ -66,8 +66,9 @@ class ShortcodeController implements Hookable {
 		return View::render(
 			'shortcode',
 			array(
-				'greeting' => SettingsModel::get_greeting(),
-				'layout'   => SettingsModel::get_layout(),
+				'greeting' => (string) SettingsModel::get( 'greeting' ),
+				'intro'    => (string) SettingsModel::get( 'intro' ),
+				'layout'   => (string) SettingsModel::get( 'layout' ),
 				'items'    => array() === $post_types ? array() : $this->get_items( $post_types, $count ),
 			)
 		);
@@ -78,14 +79,19 @@ class ShortcodeController implements Hookable {
 	 *
 	 * @param string[] $post_types Post type names.
 	 * @param int      $count      Number of entries.
-	 * @return array<int, array{title: string, url: string, date: string, featured: bool}>
+	 * @return array<int, array{title: string, url: string, date: string, featured: bool}> Date is empty when hidden.
 	 */
 	private function get_items( array $post_types, int $count ): array {
+		$by_title  = 'title' === SettingsModel::get( 'order' );
+		$show_date = (bool) SettingsModel::get( 'show_date' );
+
 		$query = new \WP_Query(
 			array(
 				'post_type'           => $post_types,
 				'post_status'         => 'publish',
 				'posts_per_page'      => $count,
+				'orderby'             => $by_title ? 'title' : 'date',
+				'order'               => $by_title ? 'ASC' : 'DESC',
 				'no_found_rows'       => true,
 				'ignore_sticky_posts' => true,
 			)
@@ -101,7 +107,7 @@ class ShortcodeController implements Hookable {
 			$items[] = array(
 				'title'    => get_the_title( $post ),
 				'url'      => (string) get_permalink( $post ),
-				'date'     => (string) get_the_date( '', $post ),
+				'date'     => $show_date ? (string) get_the_date( '', $post ) : '',
 				'featured' => PostTypeController::is_featured( $post->ID ),
 			);
 		}

@@ -16,7 +16,7 @@ use Jswebforge\PluginBoilerplate\Models\SettingsModel;
 	<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	<form action="options.php" method="post">
 		<?php
-		settings_fields( SettingsModel::OPTION_GROUP );
+		settings_fields( SettingsModel::OPTION_NAME );
 		do_settings_sections( SettingsModel::MENU_SLUG );
 		submit_button();
 		?>
