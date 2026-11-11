@@ -1,16 +1,21 @@
-const defaultConfig = require('@wordpress/scripts/config/webpack.config');
-const path = require('path');
+/**
+ * Extends the @wordpress/scripts webpack config with the plugin's entries.
+ *
+ * Each entry produces build/<name>.js, build/<name>.css (from CSS imported in
+ * the entry) and build/<name>.asset.php. Register new entries in
+ * src/Common/Assets.php as well.
+ */
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
+const path = require( 'path' );
 
 module.exports = {
 	...defaultConfig,
 	entry: {
-		'admin-dashboard': './assets/js/admin/dashboard.js',
-		'frontend-main': './assets/js/frontend/frontend.js',
-		'admin-dashboard-style': './assets/scss/admin/dashboard.scss',
-		'frontend-style': './assets/scss/frontend/frontend.scss'
+		admin: path.resolve( __dirname, 'assets/js/admin.js' ),
+		frontend: path.resolve( __dirname, 'assets/js/frontend.js' ),
 	},
 	output: {
-		path: path.resolve(__dirname, 'build'),
-		filename: '[name].js'
-	}
+		...defaultConfig.output,
+		path: path.resolve( __dirname, 'build' ),
+	},
 };

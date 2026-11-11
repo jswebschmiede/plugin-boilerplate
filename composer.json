@@ -1,64 +1,86 @@
 {
-	"name": "js/plugin-boilerplate",
-	"description": "Plugin Boilerplate",
-	"version": "1.0.0",
-	"author": "Joerg Schoeneburg",
-	"author_email": "schoeneburg.j@googlemail.com",
-	"author_homepage": "https://joerg-schoeneburg.de",
-	"license": "GPL-2.0-or-later",
-	"license_uri": "https://www.gnu.org/licenses/gpl-2.0.html",
+	"name": "jswebforge/plugin-boilerplate",
+	"description": "Starting point for WordPress plugins",
 	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Jörg Schöneburg",
+			"email": "schoeneburg.j@googlemail.com",
+			"homepage": "https://jswebforge.de"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/jswebschmiede/plugin-boilerplate/issues"
+	},
+	"require": {
+		"php": ">=8.3"
+	},
 	"require-dev": {
-		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.1",
 		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"rector/rector": "^2.0",
 		"sirbrillig/phpcs-changed": "^2.11",
-		"sirbrillig/phpcs-variable-analysis": "^2.11",
-		"wp-cli/i18n-command": "^2.4",
-		"wp-coding-standards/wpcs": "^3.0",
-		"symfony/var-dumper": "^7.0"
+		"sirbrillig/phpcs-variable-analysis": "^2.12",
+		"wp-cli/i18n-command": "^2.6",
+		"wp-coding-standards/wpcs": "^3.2"
+	},
+	"autoload": {
+		"psr-4": {
+			"Jswebforge\\PluginBoilerplate\\": "src/"
+		}
 	},
 	"scripts": {
+		"setup": "@php bin/setup.php",
 		"php:lint": "vendor/bin/phpcs -p -s",
 		"php:lint:errors": "vendor/bin/phpcs -p -s --runtime-set ignore_warnings_on_exit 1",
 		"php:lint:autofix": "vendor/bin/phpcbf",
 		"php:lint:changed": "vendor/bin/phpcs-changed --git --git-unstaged",
-		"make-pot": "wp i18n make-pot . languages/plugin-boilerplate.pot",
-		"build": [
-			"rm -rf dist",
-			"mkdir -p dist",
-			"composer install --no-dev --optimize-autoloader",
-			"pnpm run build",
-			"zip -r dist/plugin-boilerplate.zip ./ -x@.distignore"
+		"php:rector": "vendor/bin/rector process --dry-run",
+		"php:rector:fix": "vendor/bin/rector process",
+		"php:rector:clear-cache": "vendor/bin/rector clear-cache",
+		"php:rector:fix:lint": [
+			"@php:rector:fix",
+			"vendor/bin/phpcbf || true",
+			"@php:lint"
+		],
+		"make-pot": "wp i18n make-pot . languages/plugin-boilerplate.pot --exclude=assets,dist,node_modules,vendor",
+		"make-mo": "wp i18n make-mo languages",
+		"make-json": "wp i18n make-json languages",
+		"make-php": "wp i18n make-php languages",
+		"i18n": [
+			"@build:assets",
+			"@make-pot",
+			"wp i18n update-po languages/plugin-boilerplate.pot languages",
+			"@make-mo",
+			"@make-json",
+			"@make-php"
+		],
+		"build:assets": [
+			"Composer\\Config::disableProcessTimeout",
+			"pnpm install --frozen-lockfile",
+			"pnpm run build"
+		],
+		"playground": [
+			"Composer\\Config::disableProcessTimeout",
+			"npx @wp-playground/cli@latest start --php=8.3 --blueprint=blueprint.json"
+		],
+		"production": [
+			"Composer\\Config::disableProcessTimeout",
+			"@php:lint",
+			"@build:assets",
+			"@make-mo",
+			"@make-json",
+			"@make-php",
+			"@composer install --no-dev --optimize-autoloader --no-interaction",
+			"@php bin/package.php",
+			"@composer install --no-interaction"
 		]
 	},
-	"autoload": {
-		"files": [
-			"./includes/Fields/Code/field.php"
-		],
-		"psr-4": {
-			"JS\\PluginBoilerplate\\": "includes/",
-			"Carbon_Field_Code\\": "./includes/Fields/Code/core/"
-		}
-	},
-	"authors": [
-		{
-			"name": "Joerg Schoeneburg",
-			"email": "schoeneburg.j@googlemail.com",
-			"homepage": "https://joerg-schoeneburg.de"
-		}
-	],
 	"config": {
-		"process-timeout": 600,
-		"optimize-autoloader": true,
 		"sort-packages": true,
 		"allow-plugins": {
-			"dealerdirect/phpcodesniffer-composer-installer": true,
-			"automattic/jetpack-autoloader": true
+			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
-	},
-	"require": {
-		"automattic/jetpack-autoloader": "^2",
-		"htmlburger/carbon-fields": "^3.6",
-		"psr/container": "^1.0"
 	}
 }

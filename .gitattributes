@@ -1,0 +1,16 @@
+# Development-only paths omitted from git archive.
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.prettierrc export-ignore
+/.stylelintrc.json export-ignore
+/.vscode export-ignore
+/assets export-ignore
+/bin export-ignore
+/blueprint.json export-ignore
+/package.json export-ignore
+/phpcs.xml export-ignore
+/pnpm-lock.yaml export-ignore
+/postcss.config.js export-ignore
+/rector.php export-ignore
+/webpack.config.js export-ignore

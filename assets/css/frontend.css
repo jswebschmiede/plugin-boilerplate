@@ -1,0 +1,16 @@
+/*
+ * Frontend styles.
+ *
+ * Tailwind without Preflight, so the theme's base styles stay untouched.
+ * Utilities and theme variables use the "pb" prefix:
+ * write pb:flex, pb:hover:underline.
+ * source(none) disables automatic detection; only the paths below are scanned.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(pb);
+
+/* stylelint-disable-next-line at-rule-prelude-no-invalid -- source() */
+@import "tailwindcss/utilities.css" layer(utilities) prefix(pb) source(none);
+@source "../../views";
+@source "../../src";
+@source "../js";

@@ -1,0 +1,16 @@
+/*
+ * Admin styles, loaded on the plugin's own screens only
+ * (see src/Common/Assets.php).
+ *
+ * Tailwind without Preflight, so wp-admin styles stay untouched.
+ * Note: wp-admin CSS is not layered and wins over layered utilities.
+ * Use the important modifier (pb:mt-4!) where a utility must win.
+ */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(pb);
+
+/* stylelint-disable-next-line at-rule-prelude-no-invalid -- source() */
+@import "tailwindcss/utilities.css" layer(utilities) prefix(pb) source(none);
+@source "../../views";
+@source "../../src";
+@source "../js";

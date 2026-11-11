@@ -1,141 +1,129 @@
 # Plugin Boilerplate
 
-A WordPress plugin for creating and displaying bicycle rental or sales listings with an interactive tabbed interface.
+Starting point for WordPress plugins
 
-## Description
+<!-- setup:start -->
 
-The Plugin Boilerplate plugin allows you to create and manage example listings in WordPress. It provides a custom post type for examples, taxonomy for example types, and a shortcode to display an interactive overview of available examples grouped by type.
+## Creating a new plugin
 
-## Features
-
--   **Custom Post Type**: Create and manage example listings
--   **Taxonomy Support**: Organize examples by type
-
-## Installation
-
-1. Download the plugin ZIP file
-2. Go to WordPress Admin > Plugins > Add New
-3. Click "Upload Plugin" and select the ZIP file
-4. Click "Install Now" and then "Activate"
-
-### Requirements
-
--   WordPress 5.0 or higher
--   PHP 7.4 or higher
--   Composer (for dependency management)
--   Node.js and pnpm (for building assets)
-
-## Setup and Configuration
-
-### 1. Install Dependencies
-
-After activation, install PHP dependencies:
+This repository is a template. `bin/setup.php` turns it into a new plugin: it replaces every placeholder token, renames the files and then deletes itself. This section is removed as well.
 
 ```bash
-composer install
+git clone https://github.com/jswebschmiede/plugin-boilerplate.git my-plugin
+cd my-plugin
+rm -rf .git && git init
+
+php bin/setup.php                       # interactive
+php bin/setup.php --name="My Plugin" --no-interaction --dry-run   # preview only
 ```
 
-Install and build frontend assets:
+Run `php bin/setup.php --help` for all options. The defaults are derived from the plugin name.
+
+| Token                               | Example replacement   | Used for                                              |
+| ----------------------------------- | --------------------- | ----------------------------------------------------- |
+| `Plugin Boilerplate`                | `My Plugin`           | Display name                                          |
+| `plugin-boilerplate`                | `my-plugin`           | Slug, text domain, file names, handles                |
+| `plugin_boilerplate`                | `my_plugin`           | Option names, shortcode tag, hook names               |
+| `PLUGIN_BOILERPLATE`                | `MY_PLUGIN`           | Constants                                             |
+| `Jswebforge\PluginBoilerplate`      | `Acme\MyPlugin`       | PHP namespace                                         |
+| `jswebforge/plugin-boilerplate`     | `acme/my-plugin`      | Composer package                                      |
+| `jswebschmiede/plugin-boilerplate`  | `acme/my-plugin`      | GitHub repository for updates                         |
+| short prefix                        | `mp`                  | Post type, taxonomy, Tailwind prefix (`mp:flex`)      |
+| `Author`, `Author URI` header fields | your values           | Plugin header and `composer.json`                     |
+
+Afterwards:
 
 ```bash
-pnpm install
-pnpm run build
+composer update --lock && composer install
+pnpm install && pnpm run build
+composer php:lint
 ```
 
-### 4. Display on Frontend
+<!-- setup:end -->
 
-Add the shortcode to any page or post:
+## Requirements
 
-```php
-[plugin-boilerplate]
+- PHP 8.3+ and Composer
+- WordPress 7.0+
+- Node.js 20.18+ and pnpm for the asset build and the local Playground site
+
+## Structure
+
+```
+plugin-boilerplate.php      Plugin header, constants, autoloader check, bootstrap
+uninstall.php               Removes options (multisite aware)
+src/Common/                 Infrastructure: Plugin (service list), Hookable, View, Assets, Updater, Lifecycle
+src/Controllers/            Hook wiring and request handling
+src/Models/                 Data access and sanitizing
+views/                      Templates; escape everything you output here
+assets/js, assets/css       Sources for the wp-scripts build
+build/                      Compiled assets (generated, not committed)
+languages/                  .pot, .po; .mo/.json/.l10n.php are generated
+bin/package.php             Builds the release zip
 ```
 
-## Usage
+Classes live under `Jswebforge\PluginBoilerplate\` (Composer PSR-4 from `src/`).
 
-### Shortcode
+## Included examples
 
-Use the `[plugin-boilerplate]` shortcode on any page or post to display the plugin boilerplate overview.
+| Module                    | Class                     | What it shows                                                                                         |
+| ------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Settings page             | `SettingsController`, `SettingsModel` | Settings API page under **Settings → Plugin Boilerplate** with text, select and checkbox-list fields |
+| Custom post type          | `PostTypeController`      | Post type `pb_example`, taxonomy `pb_example_type`, registered meta, list column, taxonomy filter     |
+| Admin action              | `ToggleController`        | Nonce-protected row action (`admin.php?action=…`) that toggles a meta flag, with notice and redirect  |
+| Shortcode                 | `ShortcodeController`     | `[plugin_boilerplate count="5"]` renders a view and enqueues the frontend assets on demand            |
+| GitHub updates            | `Updater`                 | Offers new versions from GitHub releases via the `Update URI` header                                  |
+| Activation / deactivation | `Lifecycle`               | Registers the post type before flushing rewrite rules                                                 |
 
-## Development
+Delete what you don't need: remove the class, its entry in `Plugin::get_services()`, its views and its option names in `uninstall.php`.
 
-### Build Process
+## Conventions
+
+- Every PHP file starts with a file docblock, `declare( strict_types=1 );` and `\defined( 'ABSPATH' ) || exit;`.
+- Services implement `Hookable`; `init()` only registers hooks. Add new services in `Plugin::get_services()`, admin-only services inside the `is_admin()` branch.
+- Templates are rendered with `View::display( 'name', $data )` or `View::render()` for shortcodes. Templates escape late (`esc_html`, `esc_attr`, `esc_url`).
+- Input is read with `wp_unslash()` and sanitized immediately; state-changing requests check a nonce and a capability.
+- WordPress Coding Standards (`WordPress-Core`), long array syntax, typed class constants.
+
+## Assets and Tailwind
+
+`webpack.config.js` defines the entries `admin` and `frontend`. Each produces `build/<entry>.js`, `.css`, `-rtl.css` and `.asset.php`. `src/Common/Assets.php` registers them; the admin entry loads only on the plugin's screens, the frontend entry is enqueued by the shortcode.
+
+Tailwind CSS 4 runs through PostCSS (`postcss.config.js`). Preflight is disabled so theme and wp-admin base styles stay untouched, and all utilities use a prefix, e.g. `pb:flex`, `pb:hover:underline`, `pb:sm:grid-cols-2`. Only `views/`, `src/` and `assets/js/` are scanned for class names. wp-admin CSS is not layered and wins over layered utilities; use the important modifier (`pb:mt-4!`) where needed.
+
+## Translations
+
+UI strings are English; `languages/plugin-boilerplate-de_DE.po` contains the German translation.
 
 ```bash
-# Install dependencies
-composer install
-pnpm install
-
-# Build for production
-composer run build
-
-# Development build with watch
-pnpm run dev
-
-# Lint code
-composer run php:lint
+composer i18n      # build assets, update .pot/.po, compile .mo, .json (JS) and .l10n.php
 ```
 
-### Code Standards
+JavaScript strings are extracted from `build/`, so the JSON files match the script handles registered by `Assets`.
 
--   Follows WordPress Coding Standards
--   Uses strict PHP types
--   PHPDoc comments in English
--   ESLint for JavaScript
+## Commands
 
-### File Structure
+| Command                    | Purpose                                                    |
+| -------------------------- | ---------------------------------------------------------- |
+| `pnpm run start`           | Watch and rebuild assets                                   |
+| `pnpm run build`           | Production asset build                                     |
+| `pnpm run lint:js`         | ESLint (WordPress config)                                  |
+| `pnpm run lint:css`        | Stylelint (WordPress config plus Tailwind at-rules)        |
+| `composer php:lint`        | PHPCS with WPCS and PHPCompatibility                       |
+| `composer php:lint:autofix`| PHPCBF                                                     |
+| `composer php:rector`      | Rector dry run (PHP 8.3 set)                               |
+| `composer playground`      | Local WordPress Playground with the plugin, opens settings |
+| `composer production`      | Lint, build, compile translations, package `dist/*.zip`    |
 
-```
-plugin-boilerplate/
-├── assets/                 # Source assets (JS/SCSS)
-├── build/                  # Compiled assets
-├── includes/               # PHP classes
-│   ├── Assets/            # Asset management
-│   ├── Backend/           # Admin functionality
-│   └── Shortcodes/        # Shortcode handlers
-├── languages/             # Translation files
-├── views/                 # Template files
-└── vendor/                # Composer dependencies
-```
+## Releases and updates
 
-## API Reference
+The `Update URI` header points at GitHub, so WordPress asks `Updater` instead of wordpress.org. `Updater` reads the latest release of `jswebschmiede/plugin-boilerplate` and offers the attached `plugin-boilerplate-<version>.zip`.
 
-### Shortcodes
-
--   `[plugin-boilerplate]`: Displays the plugin boilerplate interface
-
-### PHP Classes
-
--   `PluginBoilerplate`: Main plugin class
--   `ExamplePostType`: Custom post type and taxonomy management
--   `AdminSettings`: Admin settings page
--   `Shortcode`: Shortcode handler
--   `Assets`: Asset registration and management
-
-### Hooks
-
--   `carbon_fields_register_fields`: Register custom fields
--   `init`: Register post types and taxonomies
--   `wp_enqueue_scripts`: Register frontend assets
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+1. Raise `Version` in the plugin header (the only place the version is stored).
+2. `composer production`
+3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin master vX.Y.Z`
+4. `gh release create vX.Y.Z dist/plugin-boilerplate-X.Y.Z.zip --title "vX.Y.Z" --generate-notes`
 
 ## License
 
-MIT License
-
-## Author
-
-**Joerg Schoeneburg**
-
--   Website: [https://joerg-schoeneburg.de](https://joerg-schoeneburg.de)
--   Email: schoeneburg.j@googlemail.com
-
-## Support
-
-For support, please contact the author or create an issue in the repository.
+GPL-2.0-or-later
