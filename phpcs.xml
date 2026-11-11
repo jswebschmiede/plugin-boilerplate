@@ -1,17 +1,71 @@
 <?xml version="1.0"?>
-<ruleset name="My Plugin">
-	<description>PHPCS rules for my plugin</description>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 name="Plugin Boilerplate"
+		 xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
+	<description>Coding standards for the Plugin Boilerplate WordPress plugin.</description>
 
-	<!-- WordPress Core Standard laden -->
+	<arg value="ps" />
+	<arg name="colors" />
+	<arg name="parallel"
+		 value="8" />
+
+	<!-- PHP files only. JavaScript and CSS are linted by wp-scripts. -->
+	<arg name="extensions"
+		 value="php" />
+
+	<file>.</file>
+
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>build/*</exclude-pattern>
+	<exclude-pattern>dist/*</exclude-pattern>
+	<exclude-pattern>tests/*</exclude-pattern>
+	<exclude-pattern>bin/*</exclude-pattern>
+	<exclude-pattern>languages/*.l10n.php</exclude-pattern>
+
+	<!-- Minimum supported versions. -->
+	<config name="testVersion"
+			value="8.3-" />
+	<config name="minimum_wp_version"
+			value="7.0" />
+
+	<rule ref="PHPCompatibilityWP" />
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain"
+					  type="array">
+				<element value="plugin-boilerplate" />
+			</property>
+		</properties>
+	</rule>
+
 	<rule ref="WordPress-Core">
-		<!-- Dateinamen-Prüfung komplett ausschalten -->
 		<exclude name="WordPress.Files.FileName" />
 	</rule>
 
-	<!-- Projekt-Ordner scannen -->
-	<file>.</file>
+	<rule ref="Squiz.Commenting.FunctionComment.Missing" />
 
-	<!-- Typische Ordner ausschließen -->
-	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>tests/*</exclude-pattern>
+	<!-- Typed properties and parameters make @var comments redundant. -->
+	<rule ref="Squiz.Commenting.VariableComment.MissingVar">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<!-- WordPress hooks often require unused parameters in their signature. -->
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter.Found">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<!-- Short ternaries are acceptable in modern PHP. -->
+	<rule ref="Universal.Operators.DisallowShortTernary.Found">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
+
+	<!-- Reduce false positives with typed exceptions and IDE analysis. -->
+	<rule ref="Squiz.Commenting.FunctionCommentThrowTag.WrongNumber">
+		<exclude-pattern>*</exclude-pattern>
+	</rule>
 </ruleset>

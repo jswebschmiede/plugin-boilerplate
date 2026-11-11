@@ -1,0 +1,215 @@
+# Copyright (C) 2026 jswebforge
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugin Boilerplate 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/plugin-boilerplate\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Language: de_DE\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-11T15:13:13+00:00\n"
+"PO-Revision-Date: 2026-11-11 16:00+0100\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: plugin-boilerplate\n"
+
+#. Plugin Name of the plugin
+#: plugin-boilerplate.php:3
+#: src/Controllers/SettingsController.php:45
+#: src/Controllers/SettingsController.php:46
+msgid "Plugin Boilerplate"
+msgstr "Plugin Boilerplate"
+
+#. Description of the plugin
+#: plugin-boilerplate.php:4
+msgid "Starting point for WordPress plugins"
+msgstr "Ausgangsbasis für WordPress-Plugins"
+
+#. Author of the plugin
+#: plugin-boilerplate.php:8
+msgid "jswebforge"
+msgstr ""
+
+#. Author URI of the plugin
+#: plugin-boilerplate.php:9
+msgid "https://jswebforge.de"
+msgstr ""
+
+#: plugin-boilerplate.php:51
+msgid "Run composer install in the plugin directory to generate the autoloader."
+msgstr "Führe composer install im Plugin-Verzeichnis aus, um den Autoloader zu erzeugen."
+
+#: src/Controllers/PostTypeController.php:62
+msgctxt "post type general name"
+msgid "Examples"
+msgstr "Beispiele"
+
+#: src/Controllers/PostTypeController.php:63
+msgctxt "post type singular name"
+msgid "Example"
+msgstr "Beispiel"
+
+#: src/Controllers/PostTypeController.php:64
+msgid "Add New Example"
+msgstr "Neues Beispiel hinzufügen"
+
+#: src/Controllers/PostTypeController.php:65
+msgid "Edit Example"
+msgstr "Beispiel bearbeiten"
+
+#: src/Controllers/PostTypeController.php:66
+msgid "New Example"
+msgstr "Neues Beispiel"
+
+#: src/Controllers/PostTypeController.php:67
+msgid "View Example"
+msgstr "Beispiel ansehen"
+
+#: src/Controllers/PostTypeController.php:68
+msgid "Search Examples"
+msgstr "Beispiele durchsuchen"
+
+#: src/Controllers/PostTypeController.php:69
+msgid "No examples found."
+msgstr "Keine Beispiele gefunden."
+
+#: src/Controllers/PostTypeController.php:70
+msgid "No examples found in Trash."
+msgstr "Keine Beispiele im Papierkorb gefunden."
+
+#: src/Controllers/PostTypeController.php:71
+msgid "All Examples"
+msgstr "Alle Beispiele"
+
+#: src/Controllers/PostTypeController.php:88
+msgctxt "taxonomy general name"
+msgid "Example Types"
+msgstr "Beispieltypen"
+
+#: src/Controllers/PostTypeController.php:89
+msgctxt "taxonomy singular name"
+msgid "Example Type"
+msgstr "Beispieltyp"
+
+#: src/Controllers/PostTypeController.php:90
+msgid "All Example Types"
+msgstr "Alle Beispieltypen"
+
+#: src/Controllers/PostTypeController.php:91
+msgid "Edit Example Type"
+msgstr "Beispieltyp bearbeiten"
+
+#: src/Controllers/PostTypeController.php:92
+msgid "Add New Example Type"
+msgstr "Neuen Beispieltyp hinzufügen"
+
+#: src/Controllers/PostTypeController.php:139
+#: src/Controllers/PostTypeController.php:161
+#: views/shortcode.php:43
+msgid "Featured"
+msgstr "Hervorgehoben"
+
+#: src/Controllers/SettingsController.php:63
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: src/Controllers/SettingsController.php:70
+msgid "Greeting"
+msgstr "Begrüßung"
+
+#: src/Controllers/SettingsController.php:75
+msgid "Layout"
+msgstr "Layout"
+
+#: src/Controllers/SettingsController.php:80
+msgid "Content types"
+msgstr "Inhaltstypen"
+
+#. translators: %s: Shortcode tag.
+#: src/Controllers/SettingsController.php:108
+#, php-format
+msgid "These settings control the output of the %s shortcode."
+msgstr "Diese Einstellungen steuern die Ausgabe des Shortcodes %s."
+
+#: src/Controllers/SettingsController.php:125
+msgid "Shown above the list. Leave empty to hide it."
+msgstr "Wird über der Liste angezeigt. Leer lassen, um sie auszublenden."
+
+#: src/Controllers/SettingsController.php:142
+msgid "How the shortcode arranges the entries."
+msgstr "Wie der Shortcode die Einträge anordnet."
+
+#: src/Controllers/SettingsController.php:159
+msgid "The shortcode lists the latest entries of these content types."
+msgstr "Der Shortcode listet die neuesten Einträge dieser Inhaltstypen auf."
+
+#: src/Controllers/SettingsController.php:174
+msgid "Settings"
+msgstr "Einstellungen"
+
+#. translators: %s: Post title.
+#: src/Controllers/ToggleController.php:97
+#, php-format
+msgid "Remove “%s” from featured"
+msgstr "„%s“ nicht mehr hervorheben"
+
+#. translators: %s: Post title.
+#: src/Controllers/ToggleController.php:99
+#, php-format
+msgid "Mark “%s” as featured"
+msgstr "„%s“ hervorheben"
+
+#: src/Controllers/ToggleController.php:101
+msgid "Unfeature"
+msgstr "Nicht mehr hervorheben"
+
+#: src/Controllers/ToggleController.php:101
+msgid "Feature"
+msgstr "Hervorheben"
+
+#: src/Controllers/ToggleController.php:120
+msgid "The requested content was not found."
+msgstr "Der angeforderte Inhalt wurde nicht gefunden."
+
+#: src/Controllers/ToggleController.php:124
+msgid "You are not allowed to change this content."
+msgstr "Du darfst diesen Inhalt nicht ändern."
+
+#. translators: %s: Post title.
+#: src/Controllers/ToggleController.php:166
+#, php-format
+msgid "“%s” is now featured."
+msgstr "„%s“ ist jetzt hervorgehoben."
+
+#. translators: %s: Post title.
+#: src/Controllers/ToggleController.php:168
+#, php-format
+msgid "“%s” is no longer featured."
+msgstr "„%s“ ist nicht mehr hervorgehoben."
+
+#: src/Models/SettingsModel.php:107
+msgid "List"
+msgstr "Liste"
+
+#: src/Models/SettingsModel.php:108
+msgid "Grid"
+msgstr "Raster"
+
+#: views/admin-settings.php:26
+msgid "Usage"
+msgstr "Verwendung"
+
+#: views/admin-settings.php:27
+msgid "Add the shortcode to any post or page. The optional count attribute limits the number of entries (1–20)."
+msgstr "Füge den Shortcode in einen beliebigen Beitrag oder eine Seite ein. Das optionale Attribut count begrenzt die Anzahl der Einträge (1–20)."
+
+#: views/shortcode.php:33
+msgid "Nothing to show yet."
+msgstr "Noch nichts anzuzeigen."
+
+#: build/admin.js:1
+msgid "You have unsaved changes."
+msgstr "Du hast ungespeicherte Änderungen."

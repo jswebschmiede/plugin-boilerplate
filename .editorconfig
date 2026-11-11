@@ -19,3 +19,10 @@ indent_size = 2
 
 [*.md]
 trim_trailing_whitespace = false
+
+[*.{json,yaml}]
+indent_style = tab
+
+[pnpm-lock.yaml]
+indent_style = space
+indent_size = 2
