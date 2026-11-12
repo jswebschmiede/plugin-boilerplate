@@ -5,9 +5,11 @@
 /.prettierrc export-ignore
 /.stylelintrc.json export-ignore
 /.vscode export-ignore
+/CLAUDE.md export-ignore
 /assets export-ignore
 /bin export-ignore
 /blueprint.json export-ignore
+/docs export-ignore
 /package.json export-ignore
 /phpcs.xml export-ignore
 /pnpm-lock.yaml export-ignore

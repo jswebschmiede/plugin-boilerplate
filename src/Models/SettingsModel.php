@@ -12,16 +12,26 @@ namespace Jswebforge\PluginBoilerplate\Models;
 \defined( 'ABSPATH' ) || exit;
 
 /**
- * Reads, defaults and sanitizes the plugin settings.
+ * Defines, reads and sanitizes the plugin settings.
  *
- * The three options demonstrate one field type each: text, select and checkbox list.
- * Option names are duplicated in uninstall.php; keep both in sync.
+ * All settings live in one option as an associative array. To add a setting,
+ * add an entry to get_fields(); registration, rendering, defaults, sanitizing
+ * and uninstall pick it up automatically.
+ *
+ * @phpstan-type Field array{
+ *     type: 'text'|'textarea'|'select'|'radio'|'checkbox'|'checkbox-list',
+ *     label: string,
+ *     description?: string,
+ *     choices?: array<string, string>,
+ *     default: mixed,
+ *     sanitize?: callable(mixed): mixed
+ * }
  */
 class SettingsModel {
 	/**
-	 * Settings API option group.
+	 * Option name. Also used as the Settings API option group.
 	 */
-	public const string OPTION_GROUP = 'plugin_boilerplate';
+	public const string OPTION_NAME = 'plugin_boilerplate_settings';
 
 	/**
 	 * Settings page menu slug.
@@ -29,84 +39,117 @@ class SettingsModel {
 	public const string MENU_SLUG = 'plugin-boilerplate';
 
 	/**
-	 * Option name of the greeting text (text field).
-	 */
-	public const string GREETING_OPTION = 'plugin_boilerplate_greeting';
-
-	/**
-	 * Option name of the shortcode layout (select field).
-	 */
-	public const string LAYOUT_OPTION = 'plugin_boilerplate_layout';
-
-	/**
-	 * Option name of the post types listed by the shortcode (checkbox list).
-	 */
-	public const string POST_TYPES_OPTION = 'plugin_boilerplate_post_types';
-
-	/**
-	 * Layout: one column.
-	 */
-	public const string LAYOUT_LIST = 'list';
-
-	/**
-	 * Layout: responsive grid.
-	 */
-	public const string LAYOUT_GRID = 'grid';
-
-	/**
-	 * Allowed layouts.
-	 */
-	public const array LAYOUTS = array( self::LAYOUT_LIST, self::LAYOUT_GRID );
-
-	/**
-	 * Post types used until the settings page is saved.
-	 */
-	public const array DEFAULT_POST_TYPES = array( 'post' );
-
-	/**
-	 * Gets the greeting text.
+	 * Field definitions, keyed by setting key.
 	 *
-	 * @return string Plain text, may be empty.
-	 */
-	public static function get_greeting(): string {
-		$greeting = get_option( self::GREETING_OPTION, '' );
-
-		return is_string( $greeting ) ? sanitize_text_field( $greeting ) : '';
-	}
-
-	/**
-	 * Gets the shortcode layout.
+	 * Keys per field:
+	 * - type:        View in views/fields/ and sanitizing rule in sanitize_field().
+	 * - label:       Row title on the settings page.
+	 * - description: Help text (optional). For a checkbox it is the label next to the box.
+	 * - choices:     Value => label, for select, radio and checkbox-list.
+	 * - default:     Value used until the settings page is saved.
+	 * - sanitize:    Optional callable that replaces the type's default sanitizing.
 	 *
-	 * @return string One of self::LAYOUTS.
+	 * @return array<string, array<string, mixed>>
+	 * @phpstan-return array<string, Field>
 	 */
-	public static function get_layout(): string {
-		return self::sanitize_layout( get_option( self::LAYOUT_OPTION, self::LAYOUT_LIST ) );
-	}
-
-	/**
-	 * Gets the post types listed by the shortcode.
-	 *
-	 * @return string[] Registered, selectable post type names.
-	 */
-	public static function get_post_types(): array {
-		return array_values(
-			array_filter(
-				self::get_list_option( self::POST_TYPES_OPTION, self::DEFAULT_POST_TYPES ),
-				self::is_selectable_post_type( ... )
-			)
-		);
-	}
-
-	/**
-	 * Gets layout choices.
-	 *
-	 * @return array<string, string> Layout => label.
-	 */
-	public static function get_layout_choices(): array {
+	public static function get_fields(): array {
 		return array(
-			self::LAYOUT_LIST => __( 'List', 'plugin-boilerplate' ),
-			self::LAYOUT_GRID => __( 'Grid', 'plugin-boilerplate' ),
+			'greeting'   => array(
+				'type'        => 'text',
+				'label'       => __( 'Greeting', 'plugin-boilerplate' ),
+				'description' => __( 'Shown above the list. Leave empty to hide it.', 'plugin-boilerplate' ),
+				'default'     => '',
+			),
+			'intro'      => array(
+				'type'        => 'textarea',
+				'label'       => __( 'Introduction', 'plugin-boilerplate' ),
+				'description' => __( 'Shown below the greeting. Line breaks are kept.', 'plugin-boilerplate' ),
+				'default'     => '',
+			),
+			'layout'     => array(
+				'type'        => 'select',
+				'label'       => __( 'Layout', 'plugin-boilerplate' ),
+				'description' => __( 'How the shortcode arranges the entries.', 'plugin-boilerplate' ),
+				'choices'     => array(
+					'list' => __( 'List', 'plugin-boilerplate' ),
+					'grid' => __( 'Grid', 'plugin-boilerplate' ),
+				),
+				'default'     => 'list',
+			),
+			'order'      => array(
+				'type'    => 'radio',
+				'label'   => __( 'Order', 'plugin-boilerplate' ),
+				'choices' => array(
+					'date'  => __( 'Newest first', 'plugin-boilerplate' ),
+					'title' => __( 'Alphabetical', 'plugin-boilerplate' ),
+				),
+				'default' => 'date',
+			),
+			'show_date'  => array(
+				'type'        => 'checkbox',
+				'label'       => __( 'Date', 'plugin-boilerplate' ),
+				'description' => __( 'Show the publication date of each entry.', 'plugin-boilerplate' ),
+				'default'     => true,
+			),
+			'post_types' => array(
+				'type'        => 'checkbox-list',
+				'label'       => __( 'Content types', 'plugin-boilerplate' ),
+				'description' => __( 'The shortcode lists the latest entries of these content types.', 'plugin-boilerplate' ),
+				'choices'     => self::get_post_type_choices(),
+				'default'     => array( 'post' ),
+			),
 		);
+	}
+
+	/**
+	 * Gets one setting.
+	 *
+	 * Falls back to the field default while the key has not been saved, so new
+	 * fields work without a migration. Stored values are sanitized again, which
+	 * drops choices that no longer exist (e.g. an unregistered post type).
+	 *
+	 * @param string $key Setting key from get_fields().
+	 * @return mixed Sanitized value; null for an unknown key.
+	 */
+	public static function get( string $key ): mixed {
+		$fields = self::get_fields();
+
+		if ( ! isset( $fields[ $key ] ) ) {
+			_doing_it_wrong(
+				__METHOD__,
+				/* translators: %s: Setting key. */
+				esc_html( sprintf( __( 'Unknown setting "%s".', 'plugin-boilerplate' ), $key ) ),
+				'0.1.0'
+			);
+
+			return null;
+		}
+
+		$stored = get_option( self::OPTION_NAME, array() );
+		$value  = is_array( $stored ) && array_key_exists( $key, $stored ) ? $stored[ $key ] : $fields[ $key ]['default'];
+
+		return self::sanitize_field( $fields[ $key ], $value );
+	}
+
+	/**
+	 * Sanitizes the submitted settings. Used as the register_setting() callback.
+	 *
+	 * Unknown keys are dropped. A missing key counts as an empty submission, so
+	 * unchecked checkboxes and empty checkbox lists are stored as false and an
+	 * empty list. The result passes through unchanged when sanitized again.
+	 *
+	 * @param mixed $input Raw submitted option value.
+	 * @return array<string, mixed> Sanitized settings.
+	 */
+	public static function sanitize( mixed $input ): array {
+		$input     = is_array( $input ) ? $input : array();
+		$sanitized = array();
+
+		foreach ( self::get_fields() as $key => $field ) {
+			$sanitized[ $key ] = self::sanitize_field( $field, $input[ $key ] ?? null );
+		}
+
+		return $sanitized;
 	}
 
 	/**
@@ -129,81 +172,54 @@ class SettingsModel {
 	}
 
 	/**
-	 * Sanitizes the greeting text.
+	 * Sanitizes one value according to its field type.
 	 *
-	 * @param mixed $value Raw submitted value.
-	 * @return string Plain text.
+	 * To add a field type, add a branch here and a view in views/fields/.
+	 *
+	 * @param array<string, mixed> $field Field definition.
+	 * @param mixed                $value Raw value; null when it was not submitted.
+	 * @return mixed Sanitized value.
 	 */
-	public static function sanitize_greeting( mixed $value ): string {
-		return is_string( $value ) ? sanitize_text_field( $value ) : '';
-	}
-
-	/**
-	 * Sanitizes the layout.
-	 *
-	 * @param mixed $value Raw submitted value.
-	 * @return string One of self::LAYOUTS.
-	 */
-	public static function sanitize_layout( mixed $value ): string {
-		return is_string( $value ) && in_array( $value, self::LAYOUTS, true ) ? $value : self::LAYOUT_LIST;
-	}
-
-	/**
-	 * Sanitizes the post types.
-	 *
-	 * @param mixed $value Raw submitted value.
-	 * @return string[] Selectable post type names.
-	 */
-	public static function sanitize_post_types( mixed $value ): array {
-		return array_values(
-			array_filter(
-				self::sanitize_list( $value ),
-				self::is_selectable_post_type( ... )
-			)
-		);
-	}
-
-	/**
-	 * Gets a stored list option.
-	 *
-	 * A missing option uses the defaults. A saved empty list stays empty.
-	 *
-	 * @param string   $name           Option name.
-	 * @param string[] $default_values Values used until the settings page is saved.
-	 * @return string[] Sanitized, unique keys.
-	 */
-	private static function get_list_option( string $name, array $default_values ): array {
-		$value = get_option( $name, false );
-
-		if ( false === $value ) {
-			$value = $default_values;
+	private static function sanitize_field( array $field, mixed $value ): mixed {
+		if ( isset( $field['sanitize'] ) && is_callable( $field['sanitize'] ) ) {
+			return $field['sanitize']( $value );
 		}
 
-		return self::sanitize_list( $value );
+		$default = $field['default'] ?? null;
+		$choices = is_array( $field['choices'] ?? null ) ? $field['choices'] : array();
+
+		return match ( $field['type'] ) {
+			'text'            => is_string( $value ) ? sanitize_text_field( $value ) : $default,
+			'textarea'        => is_string( $value ) ? sanitize_textarea_field( $value ) : $default,
+			'select', 'radio' => is_string( $value ) && array_key_exists( $value, $choices ) ? $value : $default,
+			'checkbox'        => in_array( $value, array( true, 1, '1' ), true ),
+			'checkbox-list'   => self::sanitize_choice_list( $value, $choices ),
+			default           => $default,
+		};
 	}
 
 	/**
-	 * Normalizes a submitted or stored list of keys.
+	 * Keeps the submitted values that exist in the choices.
 	 *
-	 * @param mixed $value Raw list.
-	 * @return string[] Unique sanitized keys. Empty strings are dropped.
+	 * @param mixed                 $value   Raw list.
+	 * @param array<string, string> $choices Value => label.
+	 * @return string[] Unique values in submitted order.
 	 */
-	private static function sanitize_list( mixed $value ): array {
+	private static function sanitize_choice_list( mixed $value, array $choices ): array {
 		if ( ! is_array( $value ) ) {
 			return array();
 		}
 
-		$sanitized = array();
+		$allowed  = array_map( strval( ... ), array_keys( $choices ) );
+		$selected = array();
 
 		foreach ( $value as $item ) {
-			if ( ! is_string( $item ) || '' === $item ) {
-				continue;
+			if ( is_string( $item ) && in_array( $item, $allowed, true ) ) {
+				$selected[] = $item;
 			}
-
-			$sanitized[] = sanitize_key( $item );
 		}
 
-		return array_values( array_unique( $sanitized ) );
+		return array_values( array_unique( $selected ) );
 	}
 
 	/**

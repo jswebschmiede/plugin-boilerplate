@@ -6,6 +6,7 @@
  * so they never collide with theme classes.
  *
  * @var string                                                                  $greeting Greeting text, may be empty.
+ * @var string                                                                  $intro    Plain text with line breaks, may be empty.
  * @var string                                                                  $layout   "list" or "grid".
  * @var array<int, array{title: string, url: string, date: string, featured: bool}> $items    Entries.
  *
@@ -17,6 +18,7 @@ declare( strict_types=1 );
 \defined( 'ABSPATH' ) || exit;
 
 $greeting ??= '';
+$intro    ??= '';
 $layout   ??= 'list';
 $items    ??= array();
 
@@ -27,6 +29,10 @@ $list_classes = 'grid' === $layout
 <section class="plugin-boilerplate pb:my-6">
 	<?php if ( '' !== $greeting ) : ?>
 		<p class="pb:mb-4 pb:text-lg pb:font-semibold"><?php echo esc_html( $greeting ); ?></p>
+	<?php endif; ?>
+
+	<?php if ( '' !== $intro ) : ?>
+		<div class="pb:mb-4"><?php echo wp_kses_post( wpautop( esc_html( $intro ) ) ); ?></div>
 	<?php endif; ?>
 
 	<?php if ( array() === $items ) : ?>
